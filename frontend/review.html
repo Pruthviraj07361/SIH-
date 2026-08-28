@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Review & Learning - StudyAI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = { darkMode: "class", theme: { extend: {
+                "colors": {"primary":"#041627","surface-container-low":"#f2f4f6","secondary":"#006b5f","surface-container-lowest":"#ffffff","on-surface-variant":"#44474c","error":"#ba1a1a","error-container":"#ffdad6","on-error-container":"#93000a","surface":"#f7f9fb","surface-variant":"#e0e3e5","secondary-container":"#62fae3","primary-fixed-dim":"#b7c8de"},
+                "borderRadius": {"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+                "spacing": {"unit":"4px","section-margin":"32px","container-padding":"20px","card-gap":"12px","gutter":"16px"},
+                "fontFamily": {"display-lg":["Playfair Display"],"headline-md":["Playfair Display"],"data-mono":["Inter"],"label-caps":["Inter"],"body-md":["Inter"],"body-lg":["Inter"]},
+                "fontSize": {"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"data-mono":["14px",{"lineHeight":"20px","fontWeight":"500"}],"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}]}
+        }}}
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen pb-24">
+<header class="w-full top-0 sticky bg-surface shadow-sm z-40 flex items-center justify-between px-container-padding py-unit">
+<a class="text-primary p-2 rounded-full" href="index.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h1 class="font-headline-md text-primary">StudyAI</h1>
+<span></span>
+</header>
+<main class="max-w-5xl mx-auto px-container-padding py-section-margin">
+<div class="mb-section-margin">
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Review & Learning</h2>
+<p class="text-on-surface-variant max-w-2xl">Let's turn these mistakes into mastery. Review your incorrect answers below.</p>
+</div>
+<div id="review-content" class="space-y-card-gap">
+<p class="text-on-surface-variant">Loading review items…</p>
+</div>
+</main>
+
+<script src="config.js"></script>
+<script>
+async function load() {
+  const container = document.getElementById("review-content");
+  try {
+    const items = await apiGet(`/review/${DEMO_USER_ID}`);
+    if (items.length === 0) {
+      container.innerHTML = `<p class="text-on-surface-variant">No wrong answers yet — nice work, or you haven't taken a quiz.</p>`;
+      return;
+    }
+    container.innerHTML = items.map(item => `
+      <article class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(26,43,60,0.05)] border border-surface-variant">
+        <p class="font-body-lg text-primary mb-6">${item.questions.question_text}</p>
+        <div class="space-y-4 mb-2">
+          <div class="p-4 rounded-lg bg-error-container border border-error/20 flex gap-3 items-start">
+            <span class="material-symbols-outlined text-error mt-0.5">cancel</span>
+            <div>
+              <p class="font-label-caps text-error text-label-caps mb-1">YOUR ANSWER</p>
+              <p class="font-body-md text-on-error-container">${item.selected_answer}</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-lg bg-secondary-container/20 border border-secondary/20 flex gap-3 items-start">
+            <span class="material-symbols-outlined text-secondary mt-0.5">check_circle</span>
+            <div>
+              <p class="font-label-caps text-secondary text-label-caps mb-1">CORRECT ANSWER</p>
+              <p class="font-body-md text-on-surface">${item.questions.correct_answer}</p>
+            </div>
+          </div>
+        </div>
+        ${item.questions.explanation ? `
+          <div class="bg-surface rounded-lg p-5 border border-primary-fixed-dim/30 mt-2">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="material-symbols-outlined text-primary text-sm">auto_awesome</span>
+              <span class="font-label-caps text-primary text-label-caps tracking-widest">AI INSIGHT</span>
+            </div>
+            <p class="font-body-md text-on-surface-variant">${item.questions.explanation}</p>
+          </div>` : ""}
+      </article>
+    `).join("");
+  } catch (err) {
+    container.innerHTML = `<p class="text-error">Couldn't load review items (${err.message}). Is the backend running at ${API_BASE}?</p>`;
+  }
+}
+load();
+</script>
+</body></html>

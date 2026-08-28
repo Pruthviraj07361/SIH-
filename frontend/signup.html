@@ -1,0 +1,263 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SANKHYASETU Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "secondary-container": "#ffa933",
+                "on-tertiary": "#ffffff",
+                "on-tertiary-fixed": "#241a0b",
+                "primary-fixed": "#d8e2ff",
+                "surface-dim": "#ebd7be",
+                "secondary-fixed-dim": "#ffb962",
+                "surface-container": "#ffebd3",
+                "on-primary": "#ffffff",
+                "outline-variant": "#c3c6d3",
+                "on-error-container": "#93000a",
+                "error-container": "#ffdad6",
+                "surface-bright": "#fff8f4",
+                "on-tertiary-fixed-variant": "#524533",
+                "secondary-fixed": "#ffddb9",
+                "on-tertiary-container": "#decab2",
+                "on-primary-fixed": "#001a41",
+                "on-error": "#ffffff",
+                "tertiary-fixed": "#f4dfc7",
+                "on-surface": "#241a0b",
+                "surface-variant": "#f4dfc7",
+                "inverse-surface": "#3a2e1e",
+                "surface-container-low": "#fff1e3",
+                "surface-container-highest": "#f4dfc7",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed-dim": "#d7c4ac",
+                "inverse-on-surface": "#ffeedb",
+                "background": "#fff8f4",
+                "tertiary": "#4b3e2c",
+                "surface-tint": "#2a5dad",
+                "tertiary-container": "#635542",
+                "on-background": "#241a0b",
+                "primary": "#003d86",
+                "secondary": "#865300",
+                "surface": "#fff8f4",
+                "on-primary-container": "#b7cdff",
+                "on-secondary-fixed": "#2b1700",
+                "surface-container-high": "#fae5cc",
+                "primary-container": "#2055a5",
+                "on-secondary-container": "#6c4200",
+                "error": "#ba1a1a",
+                "surface-container-lowest": "#ffffff",
+                "outline": "#737783",
+                "inverse-primary": "#adc7ff",
+                "on-secondary-fixed-variant": "#663e00",
+                "primary-fixed-dim": "#adc7ff",
+                "on-primary-fixed-variant": "#004493",
+                "on-surface-variant": "#434751",
+                "accent-gold": "#ffa933"
+        },
+        "borderRadius": { "DEFAULT": "0.5rem", "lg": "0.5rem", "xl": "0.5rem", "full": "9999px" },
+        "spacing": {
+                "max-width": "1440", "unit": "8", "margin-desktop": "64px", "margin-mobile": "20px",
+                "gutter": "24px", "lg": "48px", "xs": "4px", "base": "8px", "sm": "12px", "xl": "80px", "md": "24px"
+        },
+        "fontFamily": {
+                "body-lg": ["Hanken Grotesk"], "label-sm": ["Inter"], "body-md": ["Hanken Grotesk"],
+                "headline-lg": ["Playfair Display"], "headline-md": ["Playfair Display"],
+                "headline-lg-mobile": ["Playfair Display"], "display-lg": ["Playfair Display"], "label-md": ["Inter"]
+        },
+        "fontSize": {
+                "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+        }
+},
+    },
+  }
+</script>
+<style>.hero-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBF1W0HUqpalwTNEdO9ZJhfR7ogV45GQjvIt3-_FmBo5qajureyYPtfoyfmAPu87s_sUQ0zOKBA_zrUPyjBELv9RAjy9KCyzSoFM1Ect0XLkU6y2r9ckivzDaq4-3GpPrUP_zsSpenHj4qF5v-Y0SUEBgVxvly0SyB38Ht6RWK3fMl907yqU5ZdgUeTdtp1hIXIFF64Jc9h7rFWDHnq7Zjf9t4Lg9YuKzLX9GqBvPvBoEKeVmEQeNkMPA);
+    background-size: cover; background-position: bottom; background-repeat: no-repeat }
+.illustration-fallback { background: linear-gradient(to top, rgba(32, 85, 165, 0.05) 0%, transparent 100%) }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<header class="w-full px-margin-mobile md:px-margin-desktop py-md max-w-[1280px] mx-auto flex items-center justify-between z-10 relative">
+<div class="flex items-center gap-md">
+<div class="h-12 w-auto flex items-center">
+  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt54tA0GPmJNAPQ0KrMMKCOcGtECWhe6Fpkt81SRfJKvzeZ9DLIuP1Fx7RbLg1H9kjup3lnwpz-haumjsSiCcjHFfzUsQ7Ex-cgvpyLYBhLcUCSov0m69tg2-WcOAV3CjpImKsMnWsi3NyhJVfS39E076y8-jyTYZeRWvjPSq7-ZzzLFVCndnh6KULxIAouAsNRAkYa4EEpkiSIOin9L3jZoqhz4aaWp0LdbZu8toQBIQRDBr2QekPGw" alt="SANKHYASETU Institutional Logo" class="h-full w-auto object-contain">
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary-container m-0 p-0 tracking-tight">SANKHYASETU</h1>
+<p class="font-label-md text-label-md text-on-surface-variant m-0 p-0">Bridging Competency Gaps. Building Better Capabilities.</p>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col md:flex-row relative z-10 w-full max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop items-center lg:items-start pt-lg lg:pt-xl gap-xl">
+<div aria-hidden="true" class="absolute inset-0 z-[-1] pointer-events-none overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1/2 illustration-fallback hero-bg"></div>
+</div>
+<div class="w-full lg:w-3/5 flex flex-col gap-lg">
+<div class="flex flex-col gap-xs">
+<h2 class="font-headline-lg text-headline-lg text-on-surface m-0 font-normal">Join</h2>
+<h3 class="font-display-lg text-display-lg text-primary-container m-0">SANKHYASETU</h3>
+<div class="h-1 w-24 bg-accent-gold mt-base rounded-full flex gap-1">
+<div class="h-full w-16 bg-accent-gold rounded-full"></div>
+<div class="h-full w-2 bg-accent-gold rounded-full"></div>
+</div>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg m-0">
+                AI-powered learning platform for the Official Statistical System of India.<br>
+                Identify gaps. Build skills. Create impact.
+            </p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-sm md:gap-md mt-sm">
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-sm flex flex-col items-center justify-center text-center gap-sm shadow-sm transition-transform hover:-translate-y-1">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">manage_search</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Identify<br>Competency Gaps</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-sm flex flex-col items-center justify-center text-center gap-sm shadow-sm transition-transform hover:-translate-y-1">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">menu_book</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Personalized<br>Learning</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-sm flex flex-col items-center justify-center text-center gap-sm shadow-sm transition-transform hover:-translate-y-1">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">account_tree</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">iGOT Karmayogi<br>Integration</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-sm flex flex-col items-center justify-center text-center gap-sm shadow-sm transition-transform hover:-translate-y-1">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">fact_check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">AI-powered<br>Quizzes</span>
+</div>
+</div>
+<div class="h-32 hidden lg:block"></div>
+</div>
+<div class="w-full lg:w-2/5 flex justify-center lg:justify-end">
+<div class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded shadow-md p-lg flex flex-col relative z-20">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-surface-container-low border border-outline-variant rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary-container text-3xl">person_add</span>
+</div>
+<div class="text-center mt-6 mb-lg">
+<h2 class="font-headline-md text-headline-md text-primary-container m-0 inline-block relative">
+                        Sign Up
+                        <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-accent-gold"></span>
+</h2>
+</div>
+
+<div id="error-box" class="hidden bg-error-container text-on-error-container rounded p-sm mb-md text-sm"></div>
+<div id="success-box" class="hidden bg-surface-container text-secondary rounded p-sm mb-md text-sm"></div>
+
+<form id="signup-form" class="flex flex-col gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="email">Email</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-outline pointer-events-none">
+<span class="material-symbols-outlined text-xl">person</span>
+</span>
+<input class="w-full pl-10 pr-3 py-2 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 transition-all outline-none" id="email" placeholder="Enter your email" type="email" required>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="password">Password</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-outline pointer-events-none">
+<span class="material-symbols-outlined text-xl">lock</span>
+</span>
+<input class="w-full pl-10 pr-10 py-2 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 transition-all outline-none" id="password" placeholder="At least 6 characters" type="password" minlength="6" required>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-primary-container transition-colors focus:outline-none" type="button" id="toggle-password">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</div>
+<button class="mt-base w-full bg-primary-container text-on-primary py-3 px-4 rounded font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-primary transition-colors shadow-sm focus:ring-2 focus:ring-primary-container/50 outline-none" type="submit" id="submit-btn">
+                        <span id="submit-text">Create Account</span>
+                        <span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</form>
+
+<p class="text-center font-label-md text-label-md text-on-surface-variant mt-md">
+  Already have an account? <a class="text-primary-container font-semibold hover:underline" href="login.html">Log in</a>
+</p>
+</div>
+</div>
+</main>
+<footer class="w-full mt-auto relative z-20 border-t border-outline-variant bg-surface-container-lowest/80 backdrop-blur-sm">
+<div class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-md flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary-container text-3xl">gpp_good</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface m-0 uppercase">Secure Government Infrastructure</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm m-0">Your data is protected with the highest security standards.</p>
+</div>
+</div>
+<div class="flex items-center gap-md text-center md:text-right">
+<img alt="National Emblem of India" class="h-12 w-auto mix-blend-multiply opacity-80" src="https://lh3.googleusercontent.com/aida/AEtjO1W1xG2iDK6oYKCH7R6uuN9ML5kDCmbHQCFw0BgVO93ssGuUndKwvYh0VIonbTaYX56C5ZnjMcVSo4oSM9DeujTyBki6Cu9WYWKwZl1RjESWnlQgCoa4VFN1R-KK4XkCxeBdWHTq3iSWLOT-7gPKizCaDGfFXFmPCCDMckMNU39miN8f-EQe3nFGsnah5YDjPN-ETbZUF6UUuu2WdLZy-kNnKelm1xDE8K0zc5Ei7VgnnGyqS81SGArkKg4">
+<div class="flex flex-col">
+<p class="font-label-sm text-label-sm text-on-surface-variant m-0">© 2026 SANKHYASETU. All rights reserved.</p>
+<p class="font-body-md text-body-md text-outline text-sm m-0">Secure Access. Empowering Officials.</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+  document.getElementById("toggle-password").addEventListener("click", () => {
+    const pw = document.getElementById("password");
+    pw.type = pw.type === "password" ? "text" : "password";
+  });
+
+  const form = document.getElementById("signup-form");
+  const errorBox = document.getElementById("error-box");
+  const successBox = document.getElementById("success-box");
+  const submitBtn = document.getElementById("submit-btn");
+  const submitText = document.getElementById("submit-text");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.classList.add("hidden");
+    successBox.classList.add("hidden");
+    submitBtn.disabled = true;
+    submitText.textContent = "Creating account...";
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const { data, error } = await supabaseAuth.auth.signUp({ email, password });
+
+    submitBtn.disabled = false;
+    submitText.textContent = "Create Account";
+
+    if (error) {
+      errorBox.textContent = error.message;
+      errorBox.classList.remove("hidden");
+      return;
+    }
+
+    if (!data.session) {
+      successBox.textContent = "Account created! Check your email to confirm, then log in.";
+      successBox.classList.remove("hidden");
+      form.reset();
+      return;
+    }
+
+    window.location.href = "onboarding.html";
+  });
+</script>
+</body></html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StudyAI - Quiz</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = { darkMode: "class", theme: { extend: {
+              "colors": {"on-tertiary-fixed":"#281802","primary":"#041627","surface-container-low":"#f2f4f6","secondary":"#006b5f","background":"#f7f9fb","error":"#ba1a1a","surface-container":"#eceef0","surface-container-lowest":"#ffffff","outline-variant":"#c4c6cd","surface":"#f7f9fb","surface-variant":"#e0e3e5","on-background":"#191c1e","outline":"#74777d","on-surface-variant":"#44474c","error-container":"#ffdad6","on-error-container":"#93000a","primary-fixed-dim":"#b7c8de","secondary-container":"#62fae3","on-secondary-container":"#007165","on-primary":"#ffffff"},
+              "borderRadius": {"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+              "spacing": {"unit":"4px","section-margin":"32px","container-padding":"20px","card-gap":"12px","gutter":"16px"},
+              "fontFamily": {"display-lg":["Playfair Display"],"headline-md":["Playfair Display"],"data-mono":["Inter"],"label-caps":["Inter"],"body-md":["Inter"],"body-lg":["Inter"]},
+              "fontSize": {"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"data-mono":["14px",{"lineHeight":"20px","fontWeight":"500"}],"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}]}
+      }}}
+      </script>
+</head>
+<body class="bg-surface text-on-surface min-h-screen font-body-md flex flex-col">
+<header class="w-full top-0 sticky bg-surface shadow-sm z-40">
+<div class="flex items-center justify-between px-container-padding py-unit w-full h-16">
+<a class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low text-on-surface-variant" href="index.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<div class="font-headline-md text-headline-md text-primary font-bold">StudyAI</div>
+<span></span>
+</div>
+<div class="w-full px-container-padding pb-4 bg-surface">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase" id="quiz-label">Loading…</span>
+<span class="font-data-mono text-data-mono text-primary font-bold" id="quiz-progress-label"></span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5 overflow-hidden">
+<div class="bg-secondary h-1.5 rounded-full transition-all duration-500 ease-out" id="quiz-progress-bar" style="width: 0%"></div>
+</div>
+</div>
+</header>
+<main class="flex-grow w-full max-w-3xl mx-auto px-container-padding py-section-margin flex flex-col" id="main-content">
+<p class="text-on-surface-variant">Loading questions…</p>
+</main>
+
+<script src="config.js"></script>
+<script>
+let questions = [];
+let currentIndex = 0;
+let selected = null;
+let score = 0;
+let sessionId = null;
+
+async function init() {
+  const materialId = qs("material_id");
+  const topicId = qs("topic_id");
+  const main = document.getElementById("main-content");
+  if (!materialId) {
+    main.innerHTML = `<p class="text-error">No material_id in the URL — start from the Home page.</p>`;
+    return;
+  }
+  try {
+    const sessionForm = new FormData();
+    sessionForm.append("user_id", DEMO_USER_ID);
+    sessionForm.append("type", topicId ? "topic_quiz" : "full_quiz");
+    const session = await apiPostForm("/quiz-sessions", sessionForm);
+    sessionId = session.id;
+
+    const url = `/materials/${materialId}/quiz${topicId ? `?topic_id=${topicId}` : ""}`;
+    questions = await apiGet(url);
+
+    if (questions.length === 0) {
+      main.innerHTML = `<p class="text-on-surface-variant">No questions generated for this material yet.</p>`;
+      return;
+    }
+    renderQuestion();
+  } catch (err) {
+    main.innerHTML = `<p class="text-error">Couldn't load quiz (${err.message}). Is the backend running at ${API_BASE}?</p>`;
+  }
+}
+
+function renderQuestion() {
+  const q = questions[currentIndex];
+  selected = null;
+  document.getElementById("quiz-label").textContent = "Quiz";
+  document.getElementById("quiz-progress-label").textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+  document.getElementById("quiz-progress-bar").style.width = `${(currentIndex / questions.length) * 100}%`;
+
+  const optionEntries = Object.entries(q.options);
+  document.getElementById("main-content").innerHTML = `
+    <div class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(26,43,60,0.05)] border border-surface-variant p-6 md:p-8 mb-card-gap">
+      <h1 class="font-headline-md text-headline-md text-primary mb-6">${q.question_text}</h1>
+    </div>
+    <form class="flex flex-col gap-card-gap mb-section-margin" id="quiz-form">
+      ${optionEntries.map(([key, text]) => `
+        <label class="option-label relative cursor-pointer" data-key="${key}">
+          <input class="sr-only" name="answer" type="radio" value="${key}"/>
+          <div class="option-card flex items-center p-4 bg-surface-container-lowest border border-surface-variant rounded-xl hover:border-primary-fixed-dim transition-all duration-200">
+            <div class="option-circle flex-shrink-0 w-6 h-6 rounded-full border-2 border-outline-variant mr-4 flex items-center justify-center">
+              <div class="option-dot w-3 h-3 rounded-full bg-primary" style="opacity: 0;"></div>
+            </div>
+            <span class="font-body-md text-body-md text-on-surface">${text}</span>
+          </div>
+        </label>
+      `).join("")}
+    </form>
+    <div id="feedback" class="mb-4"></div>
+    <div class="flex justify-end">
+      <button class="font-label-caps text-label-caps px-8 py-4 rounded-xl text-on-primary bg-primary hover:bg-primary/90 transition-all shadow-sm opacity-50 cursor-not-allowed"
+              id="submit-btn" disabled>Submit Answer</button>
+    </div>
+  `;
+
+  document.querySelectorAll('.option-label').forEach(label => {
+    label.addEventListener("click", () => {
+      // Reset every option's visual state
+      document.querySelectorAll('.option-label').forEach(l => {
+        l.querySelector('.option-card').style.borderColor = "";
+        l.querySelector('.option-card').style.backgroundColor = "";
+        l.querySelector('.option-card').style.borderWidth = "";
+        l.querySelector('.option-circle').style.borderColor = "";
+        l.querySelector('.option-dot').style.opacity = "0";
+        l.querySelector('input').checked = false;
+      });
+
+      // Highlight the clicked option
+      label.querySelector('input').checked = true;
+      label.querySelector('.option-card').style.borderColor = "#041627";
+      label.querySelector('.option-card').style.borderWidth = "2px";
+      label.querySelector('.option-card').style.backgroundColor = "rgba(4, 22, 39, 0.05)";
+      label.querySelector('.option-circle').style.borderColor = "#041627";
+      label.querySelector('.option-dot').style.opacity = "1";
+
+      selected = label.dataset.key;
+      const btn = document.getElementById("submit-btn");
+      btn.disabled = false;
+      btn.classList.remove("opacity-50", "cursor-not-allowed");
+    });
+  });
+
+  document.getElementById("submit-btn").onclick = submitAnswer;
+}
+
+async function submitAnswer() {
+  if (!selected) return;
+  const q = questions[currentIndex];
+  const form = new FormData();
+  form.append("user_id", DEMO_USER_ID);
+  form.append("question_id", q.id);
+  form.append("quiz_session_id", sessionId);
+  form.append("selected_answer", selected);
+
+  const btn = document.getElementById("submit-btn");
+  btn.disabled = true;
+  btn.textContent = "Checking…";
+
+  try {
+    const result = await apiPostForm("/attempts", form);
+    if (result.is_correct) score++;
+
+    document.getElementById("feedback").innerHTML = `
+      <div class="p-4 rounded-lg ${result.is_correct ? 'bg-secondary-container/30 border border-secondary' : 'bg-error-container border border-error/30'}">
+        <p class="font-body-md font-bold ${result.is_correct ? 'text-on-secondary-container' : 'text-on-error-container'}">
+          ${result.is_correct ? "Correct!" : `Incorrect — correct answer: ${q.correct_answer}`}
+        </p>
+        ${q.explanation ? `<p class="text-sm text-on-surface-variant mt-1">${q.explanation}</p>` : ""}
+      </div>
+    `;
+    btn.textContent = currentIndex < questions.length - 1 ? "Next Question" : "Finish Quiz";
+    btn.disabled = false;
+    btn.onclick = nextQuestion;
+    document.querySelectorAll('.option-label input').forEach(r => r.disabled = true);
+  } catch (err) {
+    document.getElementById("feedback").innerHTML = `<p class="text-error">Couldn't submit answer (${err.message})</p>`;
+  }
+}
+
+async function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= questions.length) {
+    const form = new FormData();
+    form.append("score", score);
+    try { await apiPatchForm(`/quiz-sessions/${sessionId}/complete`, form); } catch (e) {}
+    document.getElementById("main-content").innerHTML = `
+      <div class="text-center py-12">
+        <h2 class="font-headline-md text-headline-md text-primary mb-2">Quiz Complete</h2>
+        <p class="text-on-surface-variant mb-6">You scored ${score} / ${questions.length}</p>
+        <a class="bg-primary text-on-primary px-6 py-3 rounded-lg inline-block" href="analytics.html">View Analytics</a>
+      </div>
+    `;
+    document.getElementById("quiz-progress-bar").style.width = "100%";
+    return;
+  }
+  renderQuestion();
+}
+
+init();
+</script>
+</body></html>

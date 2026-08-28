@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StudyAI - Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = { darkMode: "class", theme: { extend: {
+                "colors": {"primary":"#041627","surface-container-low":"#f2f4f6","secondary":"#006b5f","surface-container-lowest":"#ffffff","outline":"#74777d","on-surface-variant":"#44474c","error":"#ba1a1a","surface":"#f7f9fb","surface-variant":"#e0e3e5","secondary-container":"#62fae3","on-secondary-container":"#007165"},
+                "borderRadius": {"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+                "spacing": {"unit":"4px","section-margin":"32px","container-padding":"20px","card-gap":"12px","gutter":"16px"},
+                "fontFamily": {"display-lg":["Playfair Display"],"headline-md":["Playfair Display"],"data-mono":["Inter"],"label-caps":["Inter"],"body-md":["Inter"]},
+                "fontSize": {"display-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"data-mono":["14px",{"lineHeight":"20px","fontWeight":"500"}],"label-caps":["12px",{"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}]}
+        }}}
+    </script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen pb-24 font-body-md">
+<header class="w-full top-0 sticky z-40 bg-surface shadow-sm flex items-center justify-between px-container-padding py-unit">
+<a class="text-primary hover:bg-surface-container-low p-2 rounded-full" href="index.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<h1 class="font-headline-md text-headline-md text-primary">StudyAI</h1>
+<span></span>
+</header>
+<main class="flex-1 p-container-padding max-w-5xl mx-auto w-full">
+<div class="mb-section-margin">
+<h2 class="font-display-lg text-display-lg-mobile text-primary mb-2">Performance Analytics</h2>
+<p class="text-on-surface-variant font-body-md">Your overall academic standing and quiz performance.</p>
+</div>
+<div id="analytics-content">
+<p class="text-on-surface-variant">Loading analytics…</p>
+</div>
+</main>
+
+<script src="config.js"></script>
+<script>
+async function load() {
+  const container = document.getElementById("analytics-content");
+  try {
+    const data = await apiGet(`/analytics/${DEMO_USER_ID}`);
+    if (data.breakdown.length === 0) {
+      container.innerHTML = `<p class="text-on-surface-variant">No quiz attempts yet — take a quiz to see analytics here.</p>`;
+      return;
+    }
+    const overall = Math.round(data.breakdown.reduce((s, t) => s + t.accuracy, 0) / data.breakdown.length);
+
+    container.innerHTML = `
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+        <div class="col-span-1 md:col-span-5 bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(26,43,60,0.05)] border border-surface-variant flex flex-col items-center justify-center">
+          <h3 class="font-headline-md text-headline-md text-primary w-full text-left mb-4">Overall Score</h3>
+          <p class="text-5xl font-bold text-primary">${overall}%</p>
+          <p class="text-on-surface-variant mt-2">Total Average</p>
+        </div>
+        <div class="col-span-1 md:col-span-7 bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(26,43,60,0.05)] border border-surface-variant">
+          <h3 class="font-headline-md text-headline-md text-primary mb-6">Performance by Topic</h3>
+          <div class="space-y-6">
+            ${data.breakdown.map(t => `
+              <div>
+                <div class="flex justify-between mb-2">
+                  <span class="font-data-mono text-data-mono text-primary">${t.topic}</span>
+                  <span class="font-data-mono text-data-mono font-bold ${t.accuracy >= 70 ? 'text-secondary' : t.accuracy >= 50 ? 'text-outline' : 'text-error'}">${t.accuracy}%</span>
+                </div>
+                <div class="w-full bg-surface-container-low rounded-full h-2">
+                  <div class="${t.accuracy >= 70 ? 'bg-secondary' : t.accuracy >= 50 ? 'bg-outline' : 'bg-error'} h-2 rounded-full" style="width: ${t.accuracy}%"></div>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+        <div class="col-span-1 md:col-span-12 bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(26,43,60,0.05)] border border-surface-variant">
+          <div class="flex items-center space-x-2 mb-4">
+            <span class="material-symbols-outlined text-error">trending_down</span>
+            <h3 class="font-headline-md text-headline-md text-primary">Weakest Topic</h3>
+          </div>
+          <p class="text-on-surface-variant">${data.weakest_topic ?? "N/A"} — <a class="text-primary underline" href="review.html">review your wrong answers</a> here.</p>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    container.innerHTML = `<p class="text-error">Couldn't load analytics (${err.message}). Is the backend running at ${API_BASE}?</p>`;
+  }
+}
+load();
+</script>
+</body></html>

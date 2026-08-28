@@ -1,0 +1,233 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SANKHYASETU StudyAI - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+      "colors": {
+        "on-primary": "#ffffff", "background": "#fff8f4", "surface": "#fff8f4",
+        "surface-container-lowest": "#ffffff", "surface-container-low": "#fff1e3",
+        "surface-container": "#ffebd3", "outline-variant": "#c3c6d3",
+        "on-surface": "#241a0b", "on-surface-variant": "#434751",
+        "primary": "#003d86", "primary-container": "#2055a5",
+        "secondary": "#865300", "accent-gold": "#ffa933",
+        "error": "#ba1a1a", "outline": "#737783"
+      },
+      "borderRadius": { "DEFAULT": "0.5rem", "lg": "0.5rem", "xl": "0.5rem", "full": "9999px" },
+      "fontFamily": {
+        "body-md": ["Hanken Grotesk"], "headline-md": ["Playfair Display"],
+        "label-md": ["Inter"], "label-sm": ["Inter"]
+      }
+    }}
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+
+<!-- Header -->
+<header class="w-full bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-40">
+<div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="SANKHYASETU logo" class="h-9 w-9 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt54tA0GPmJNAPQ0KrMMKCOcGtECWhe6Fpkt81SRfJKvzeZ9DLIuP1Fx7RbLg1H9kjup3lnwpz-haumjsSiCcjHFfzUsQ7Ex-cgvpyLYBhLcUCSov0m69tg2-WcOAV3CjpImKsMnWsi3NyhJVfS39E076y8-jyTYZeRWvjPSq7-ZzzLFVCndnh6KULxIAouAsNRAkYa4EEpkiSIOin9L3jZoqhz4aaWp0LdbZu8toQBIQRDBr2QekPGw">
+<h1 class="font-headline-md text-lg text-primary-container">SANKHYASETU StudyAI</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
+<button id="avatar-btn" class="w-9 h-9 rounded-full bg-primary-container text-white flex items-center justify-center font-semibold text-sm">?</button>
+</div>
+</div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-8 flex flex-col gap-8">
+
+<!-- Top row: Profile card + Upload card -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  <!-- Profile Card -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col gap-2">
+    <p id="profile-username" class="font-headline-md text-xl text-on-surface">Loading...</p>
+    <p id="profile-department" class="text-sm text-on-surface-variant">-</p>
+    <p class="text-xs font-label-sm text-secondary uppercase tracking-wider mt-3">Current Goal</p>
+    <p id="profile-goal" class="text-on-surface">-</p>
+    <a href="onboarding.html" class="mt-4 inline-block text-center border border-primary-container text-primary-container rounded px-4 py-2 text-sm font-medium hover:bg-surface-container-low transition-colors">
+      Edit Profile
+    </a>
+  </div>
+
+  <!-- Upload Card -->
+  <div id="drop-zone" class="bg-surface-container-lowest border-2 border-dashed border-outline-variant rounded-lg p-6 flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:border-primary-container transition-colors">
+    <p class="font-headline-md text-lg text-on-surface">Drag &amp; drop your PDF here</p>
+    <p class="text-sm text-on-surface-variant max-w-xs">Supported formats: PDF, DOCX (Max 50MB). The AI will automatically parse and generate quizzes based on this material.</p>
+    <button id="upload-btn" type="button" class="mt-2 bg-primary-container text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2 hover:bg-primary transition-colors">
+      <span class="material-symbols-outlined text-lg">add</span> Add PDF
+    </button>
+    <input type="file" id="pdf-input" accept="application/pdf" style="display:none">
+    <p id="upload-status" class="text-xs text-secondary mt-2 hidden"></p>
+  </div>
+
+</div>
+
+<!-- Learning Progress -->
+<div>
+  <h2 class="font-headline-md text-xl text-on-surface mb-4">Your Learning Progress</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center gap-3">
+      <span class="material-symbols-outlined text-primary-container bg-surface-container-low rounded-full p-2">timer</span>
+      <div>
+        <p class="text-xs text-on-surface-variant">Quizzes Completed</p>
+        <p id="stat-quizzes" class="text-xl font-semibold text-on-surface">0</p>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center gap-3">
+      <span class="material-symbols-outlined text-accent-gold bg-surface-container-low rounded-full p-2">star</span>
+      <div>
+        <p class="text-xs text-on-surface-variant">Average Score</p>
+        <p id="stat-score" class="text-xl font-semibold text-on-surface">0%</p>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
+      <div class="flex justify-between items-center mb-2">
+        <p class="text-xs text-on-surface-variant">Competency Progress</p>
+        <p id="stat-competency-label" class="text-xs font-semibold text-primary-container">0%</p>
+      </div>
+      <div class="w-full bg-surface-container-low rounded-full h-2">
+        <div id="stat-competency-bar" class="bg-accent-gold h-2 rounded-full transition-all duration-500" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Materials -->
+<div>
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="font-headline-md text-xl text-on-surface">Recent Materials</h2>
+    <a href="index.html" class="text-sm text-primary-container font-medium hover:underline">View All</a>
+  </div>
+  <div id="recent-materials" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <p class="text-sm text-on-surface-variant">Loading...</p>
+  </div>
+</div>
+
+<!-- Recommended Focus Areas -->
+<div>
+  <h2 class="font-headline-md text-xl text-on-surface mb-4">Recommended Focus Areas</h2>
+  <div id="focus-areas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <p class="text-sm text-on-surface-variant">Loading...</p>
+  </div>
+</div>
+
+</main>
+
+<script>
+  const ACCENT_COLORS = ["border-t-primary-container", "border-t-accent-gold", "border-t-secondary"];
+
+  function timeAgo(dateStr) {
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const days = Math.floor(diffMs / 86400000);
+    if (days <= 0) return "Added today";
+    if (days === 1) return "Added 1 day ago";
+    if (days < 7) return `Added ${days} days ago`;
+    const weeks = Math.floor(days / 7);
+    return weeks === 1 ? "Added 1 week ago" : `Added ${weeks} weeks ago`;
+  }
+
+  function renderMaterials(materials) {
+    const el = document.getElementById("recent-materials");
+    if (!materials.length) {
+      el.innerHTML = `<p class="text-sm text-on-surface-variant">No materials uploaded yet.</p>`;
+      return;
+    }
+    el.innerHTML = materials.map(m => `
+      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-start gap-3">
+        <span class="material-symbols-outlined text-error">picture_as_pdf</span>
+        <div class="min-w-0">
+          <p class="text-sm font-medium text-on-surface truncate">${m.filename}</p>
+          <p class="text-xs text-on-surface-variant">${timeAgo(m.upload_date)}</p>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function renderFocusAreas(areas) {
+    const el = document.getElementById("focus-areas");
+    if (!areas.length) {
+      el.innerHTML = `<p class="text-sm text-on-surface-variant">Complete a few quizzes to see personalized focus areas here.</p>`;
+      return;
+    }
+    el.innerHTML = areas.map((a, i) => `
+      <div class="bg-surface-container-lowest border border-outline-variant border-t-4 ${ACCENT_COLORS[i % 3]} rounded-lg p-4 flex flex-col gap-2">
+        <p class="font-semibold text-on-surface">${a.topic}</p>
+        <p class="text-sm text-on-surface-variant flex-1">${a.accuracy}% accuracy so far — focused review here will help most.</p>
+        <a href="index.html" class="text-sm text-primary-container font-medium hover:underline">Start Module →</a>
+      </div>
+    `).join("");
+  }
+
+  (async () => {
+    CURRENT_USER_ID = await requireLogin();
+    if (!CURRENT_USER_ID) return;
+
+    const data = await apiGet(`/dashboard/${CURRENT_USER_ID}`);
+
+    if (data.profile) {
+      document.getElementById("profile-username").textContent = data.profile.username || "Scholar";
+      document.getElementById("profile-department").textContent = data.profile.department || "";
+      document.getElementById("profile-goal").textContent = data.profile.goal || "-";
+      document.getElementById("avatar-btn").textContent = (data.profile.username || "?").charAt(0).toUpperCase();
+    } else {
+      window.location.href = "onboarding.html";
+      return;
+    }
+
+    document.getElementById("stat-quizzes").textContent = data.quizzes_completed;
+    document.getElementById("stat-score").textContent = data.average_score + "%";
+    document.getElementById("stat-competency-label").textContent = data.competency_progress + "%";
+    document.getElementById("stat-competency-bar").style.width = data.competency_progress + "%";
+
+    renderMaterials(data.recent_materials);
+    renderFocusAreas(data.weak_areas);
+  })();
+
+  // Upload wiring (same pattern as index.html)
+  const dropZone = document.getElementById("drop-zone");
+  const pdfInput = document.getElementById("pdf-input");
+  const uploadStatus = document.getElementById("upload-status");
+
+  document.getElementById("upload-btn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    pdfInput.click();
+  });
+  dropZone.addEventListener("click", () => pdfInput.click());
+  dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("border-primary-container"); });
+  dropZone.addEventListener("dragleave", () => dropZone.classList.remove("border-primary-container"));
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("border-primary-container");
+    if (e.dataTransfer.files[0]) handleUpload(e.dataTransfer.files[0]);
+  });
+  pdfInput.addEventListener("change", (e) => {
+    if (e.target.files[0]) handleUpload(e.target.files[0]);
+  });
+
+  async function handleUpload(file) {
+    uploadStatus.textContent = "Uploading and processing...";
+    uploadStatus.classList.remove("hidden");
+    const formData = new FormData();
+    formData.append("user_id", CURRENT_USER_ID);
+    formData.append("file", file);
+    try {
+      const result = await apiPostForm("/materials/upload", formData);
+      window.location.href = `embedding-confirmation.html?material_id=${result.material_id}`;
+    } catch (err) {
+      uploadStatus.textContent = "Upload failed: " + err.message;
+    }
+  }
+</script>
+</body></html>
