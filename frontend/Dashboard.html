@@ -1,233 +1,424 @@
-<!DOCTYPE html><html class="light" lang="en"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>SANKHYASETU StudyAI - Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SANKHYASETU - Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: { extend: {
-      "colors": {
-        "on-primary": "#ffffff", "background": "#fff8f4", "surface": "#fff8f4",
-        "surface-container-lowest": "#ffffff", "surface-container-low": "#fff1e3",
-        "surface-container": "#ffebd3", "outline-variant": "#c3c6d3",
-        "on-surface": "#241a0b", "on-surface-variant": "#434751",
-        "primary": "#003d86", "primary-container": "#2055a5",
-        "secondary": "#865300", "accent-gold": "#ffa933",
-        "error": "#ba1a1a", "outline": "#737783"
-      },
-      "borderRadius": { "DEFAULT": "0.5rem", "lg": "0.5rem", "xl": "0.5rem", "full": "9999px" },
-      "fontFamily": {
-        "body-md": ["Hanken Grotesk"], "headline-md": ["Playfair Display"],
-        "label-md": ["Inter"], "label-sm": ["Inter"]
-      }
-    }}
-  };
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: { extend: {
+                "colors": {
+                        "secondary-container": "#ffa933",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#241a0b",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-dim": "#ebd7be",
+                        "secondary-fixed-dim": "#ffb962",
+                        "surface-container": "#ffebd3",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c3c6d3",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fff8f4",
+                        "on-tertiary-fixed-variant": "#524533",
+                        "secondary-fixed": "#ffddb9",
+                        "on-tertiary-container": "#decab2",
+                        "on-primary-fixed": "#001a41",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#f4dfc7",
+                        "on-surface": "#241a0b",
+                        "surface-variant": "#f4dfc7",
+                        "inverse-surface": "#3a2e1e",
+                        "surface-container-low": "#fff1e3",
+                        "surface-container-highest": "#f4dfc7",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#d7c4ac",
+                        "inverse-on-surface": "#ffeedb",
+                        "background": "#fff8f4",
+                        "tertiary": "#4b3e2c",
+                        "surface-tint": "#2a5dad",
+                        "tertiary-container": "#635542",
+                        "on-background": "#241a0b",
+                        "primary": "#003d86",
+                        "secondary": "#865300",
+                        "surface": "#fff8f4",
+                        "on-primary-container": "#b7cdff",
+                        "on-secondary-fixed": "#2b1700",
+                        "surface-container-high": "#fae5cc",
+                        "primary-container": "#2055a5",
+                        "on-secondary-container": "#6c4200",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#737783",
+                        "inverse-primary": "#adc7ff",
+                        "on-secondary-fixed-variant": "#663e00",
+                        "primary-fixed-dim": "#adc7ff",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-surface-variant": "#434751",
+                        "accent-gold": "#ffa933"
+                },
+                "borderRadius": {"DEFAULT":"0.5rem","lg":"0.5rem","xl":"0.5rem","full":"9999px"},
+                "spacing": {"unit":"8px","section-margin":"32px","container-padding":"20px","card-gap":"12px","gutter":"24px","lg":"48px","xs":"4px","base":"8px","sm":"12px","xl":"80px","md":"24px"},
+                "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"], "label-sm": ["Inter"], "body-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Playfair Display"], "headline-md": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"], "display-lg": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"], "label-md": ["Inter"],
+                        "data-mono": ["Inter"], "label-caps": ["Inter"]
+                },
+                "fontSize": {
+                        "body-lg": ["18px", {"lineHeight":"1.6","fontWeight":"400"}],
+                        "label-sm": ["12px", {"lineHeight":"1.0","letterSpacing":"0.05em","fontWeight":"600"}],
+                        "body-md": ["16px", {"lineHeight":"1.5","fontWeight":"400"}],
+                        "headline-lg": ["32px", {"lineHeight":"1.2","fontWeight":"600"}],
+                        "headline-md": ["24px", {"lineHeight":"1.3","fontWeight":"500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight":"1.2","fontWeight":"600"}],
+                        "display-lg": ["48px", {"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"700"}],
+                        "display-lg-mobile": ["28px", {"lineHeight":"1.2","fontWeight":"600"}],
+                        "label-md": ["14px", {"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],
+                        "data-mono": ["14px", {"lineHeight":"20px","fontWeight":"500"}],
+                        "label-caps": ["12px", {"lineHeight":"16px","letterSpacing":"0.05em","fontWeight":"600"}]
+                }
+            }}
+        }
+    </script>
+<style>
+        body { background-color: #fff8f4; }
+        .card-elevation { box-shadow: 0px 4px 20px rgba(36, 26, 11, 0.05); border: 1px solid #c3c6d3; }
+        .card-interactive:active { transform: scale(0.98); box-shadow: 0px 2px 10px rgba(36, 26, 11, 0.03); transition: all 0.15s ease-out; }
+        .tab-btn { white-space: nowrap; }
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(0, 61, 134, 0.2);
+            border-top-color: #003d86;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 1.6s; } }
+    </style>
 </head>
-<body class="bg-background text-on-surface font-body-md min-h-screen">
-
-<!-- Header -->
-<header class="w-full bg-surface-container-lowest border-b border-outline-variant sticky top-0 z-40">
-<div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-<div class="flex items-center gap-3">
-<img alt="SANKHYASETU logo" class="h-9 w-9 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt54tA0GPmJNAPQ0KrMMKCOcGtECWhe6Fpkt81SRfJKvzeZ9DLIuP1Fx7RbLg1H9kjup3lnwpz-haumjsSiCcjHFfzUsQ7Ex-cgvpyLYBhLcUCSov0m69tg2-WcOAV3CjpImKsMnWsi3NyhJVfS39E076y8-jyTYZeRWvjPSq7-ZzzLFVCndnh6KULxIAouAsNRAkYa4EEpkiSIOin9L3jZoqhz4aaWp0LdbZu8toQBIQRDBr2QekPGw">
-<h1 class="font-headline-md text-lg text-primary-container">SANKHYASETU StudyAI</h1>
+<body class="bg-background text-on-surface pb-6 font-body-md">
+<header class="w-full top-0 sticky shadow-sm z-40 bg-surface-container-lowest/90 backdrop-blur-sm border-b border-outline-variant">
+<div class="flex items-center justify-between gap-md px-container-padding py-unit w-full h-16 max-w-6xl mx-auto">
+<div class="flex items-center gap-md">
+<div class="h-10 w-auto flex items-center">
+<img alt="SANKHYASETU Institutional Logo" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt54tA0GPmJNAPQ0KrMMKCOcGtECWhe6Fpkt81SRfJKvzeZ9DLIuP1Fx7RbLg1H9kjup3lnwpz-haumjsSiCcjHFfzUsQ7Ex-cgvpyLYBhLcUCSov0m69tg2-WcOAV3CjpImKsMnWsi3NyhJVfS39E076y8-jyTYZeRWvjPSq7-ZzzLFVCndnh6KULxIAouAsNRAkYa4EEpkiSIOin9L3jZoqhz4aaWp0LdbZu8toQBIQRDBr2QekPGw"/>
 </div>
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer">notifications</span>
-<button id="avatar-btn" class="w-9 h-9 rounded-full bg-primary-container text-white flex items-center justify-center font-semibold text-sm">?</button>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary-container m-0 p-0 tracking-tight">SANKHYASETU</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant m-0 p-0 normal-case tracking-normal">Bridging Competency Gaps. Building Better Capabilities.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-9 h-9 rounded-full bg-primary-container text-white flex items-center justify-center font-semibold text-sm" id="avatar-btn" title="Log out" onclick="logout()">?</button>
 </div>
 </div>
 </header>
 
-<main class="max-w-6xl mx-auto px-6 py-8 flex flex-col gap-8">
+<div class="flex flex-col md:flex-row max-w-6xl mx-auto">
+<!-- Sidebar -->
+<aside class="w-full md:w-64 border-b md:border-b-0 md:border-r border-outline-variant bg-surface-container-lowest md:sticky md:top-16 md:self-start">
+<nav class="flex md:flex-col overflow-x-auto md:overflow-visible px-2 md:px-4 py-2 md:py-6 gap-1 md:gap-2">
+<button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-lg font-data-mono text-data-mono bg-secondary-container text-on-secondary-container" data-tab="material" id="tab-material" onclick="showTab('material')">
+<span class="material-symbols-outlined">folder_open</span> My Material
+</button>
+<button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-lg font-data-mono text-data-mono text-on-surface-variant" data-tab="quizzes" id="tab-quizzes" onclick="showTab('quizzes')">
+<span class="material-symbols-outlined">quiz</span> My Quizzes
+</button>
+<button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-lg font-data-mono text-data-mono text-on-surface-variant" data-tab="doubt" id="tab-doubt" onclick="showTab('doubt')">
+<span class="material-symbols-outlined">forum</span> Doubt Session
+</button>
+<button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-lg font-data-mono text-data-mono text-on-surface-variant" data-tab="analysis" id="tab-analysis" onclick="showTab('analysis')">
+<span class="material-symbols-outlined">analytics</span> Analysis
+</button>
+</nav>
+</aside>
 
-<!-- Top row: Profile card + Upload card -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Content -->
+<main class="flex-1 px-container-padding py-6 space-y-section-margin">
 
-  <!-- Profile Card -->
-  <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 flex flex-col gap-2">
-    <p id="profile-username" class="font-headline-md text-xl text-on-surface">Loading...</p>
-    <p id="profile-department" class="text-sm text-on-surface-variant">-</p>
-    <p class="text-xs font-label-sm text-secondary uppercase tracking-wider mt-3">Current Goal</p>
-    <p id="profile-goal" class="text-on-surface">-</p>
-    <a href="onboarding.html" class="mt-4 inline-block text-center border border-primary-container text-primary-container rounded px-4 py-2 text-sm font-medium hover:bg-surface-container-low transition-colors">
-      Edit Profile
-    </a>
-  </div>
+<!-- Panel: My Material -->
+<section id="panel-material">
+<section class="mb-8">
+<h2 class="font-headline-md text-headline-md text-primary mb-2" id="welcome-heading">Welcome back, Scholar.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Ready to synthesize new knowledge today?</p>
+</section>
 
-  <!-- Upload Card -->
-  <div id="drop-zone" class="bg-surface-container-lowest border-2 border-dashed border-outline-variant rounded-lg p-6 flex flex-col items-center justify-center text-center gap-2 cursor-pointer hover:border-primary-container transition-colors">
-    <p class="font-headline-md text-lg text-on-surface">Drag &amp; drop your PDF here</p>
-    <p class="text-sm text-on-surface-variant max-w-xs">Supported formats: PDF, DOCX (Max 50MB). The AI will automatically parse and generate quizzes based on this material.</p>
-    <button id="upload-btn" type="button" class="mt-2 bg-primary-container text-white px-4 py-2 rounded text-sm font-medium flex items-center gap-2 hover:bg-primary transition-colors">
-      <span class="material-symbols-outlined text-lg">add</span> Add PDF
-    </button>
-    <input type="file" id="pdf-input" accept="application/pdf" style="display:none">
-    <p id="upload-status" class="text-xs text-secondary mt-2 hidden"></p>
-  </div>
-
+<!-- Profile card -->
+<div class="bg-surface-container-lowest rounded-xl card-elevation p-6 flex flex-col gap-2 mb-section-margin">
+<p class="font-headline-md text-headline-md text-primary" id="profile-username">Loading...</p>
+<p class="font-body-md text-on-surface-variant" id="profile-department">-</p>
+<p class="font-label-caps text-label-caps text-secondary uppercase tracking-wider mt-3">Current Goal</p>
+<p class="font-body-md text-on-surface" id="profile-goal">-</p>
+<a class="mt-4 inline-block text-center border border-primary-container text-primary-container rounded-lg px-4 py-2 font-data-mono text-data-mono hover:bg-surface-container-low transition-colors w-fit" href="onboarding.html">
+Edit Profile
+</a>
 </div>
 
-<!-- Learning Progress -->
-<div>
-  <h2 class="font-headline-md text-xl text-on-surface mb-4">Your Learning Progress</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center gap-3">
-      <span class="material-symbols-outlined text-primary-container bg-surface-container-low rounded-full p-2">timer</span>
-      <div>
-        <p class="text-xs text-on-surface-variant">Quizzes Completed</p>
-        <p id="stat-quizzes" class="text-xl font-semibold text-on-surface">0</p>
-      </div>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-center gap-3">
-      <span class="material-symbols-outlined text-accent-gold bg-surface-container-low rounded-full p-2">star</span>
-      <div>
-        <p class="text-xs text-on-surface-variant">Average Score</p>
-        <p id="stat-score" class="text-xl font-semibold text-on-surface">0%</p>
-      </div>
-    </div>
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4">
-      <div class="flex justify-between items-center mb-2">
-        <p class="text-xs text-on-surface-variant">Competency Progress</p>
-        <p id="stat-competency-label" class="text-xs font-semibold text-primary-container">0%</p>
-      </div>
-      <div class="w-full bg-surface-container-low rounded-full h-2">
-        <div id="stat-competency-bar" class="bg-accent-gold h-2 rounded-full transition-all duration-500" style="width:0%"></div>
-      </div>
-    </div>
-  </div>
+<!-- Upload Material Card (wired to POST /materials/upload) -->
+<div class="bg-surface-container-lowest rounded-xl card-elevation p-6 flex flex-col items-center justify-center border border-dashed border-outline-variant mb-section-margin">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-4xl text-primary" id="upload-icon">cloud_upload</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2 text-center">Upload Material</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-center mb-6">Drop your PDF here to begin AI processing.</p>
+<input accept="application/pdf" class="hidden" id="pdf-input" type="file"/>
+<button class="bg-primary text-on-primary font-data-mono text-data-mono px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-primary-container transition-colors card-interactive" id="upload-btn">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                    Add PDF
+                </button>
+<div class="flex items-center gap-2 mt-3 hidden" id="upload-status">
+<span class="spinner hidden" id="upload-spinner"></span>
+<p class="font-body-md text-sm text-on-surface-variant" id="upload-status-text"></p>
+</div>
 </div>
 
-<!-- Recent Materials -->
-<div>
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="font-headline-md text-xl text-on-surface">Recent Materials</h2>
-    <a href="index.html" class="text-sm text-primary-container font-medium hover:underline">View All</a>
-  </div>
-  <div id="recent-materials" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <p class="text-sm text-on-surface-variant">Loading...</p>
-  </div>
+<!-- Recent Materials (live from GET /materials?user_id=...) -->
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-headline-md text-headline-md text-primary">Recent Materials</h3>
 </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-card-gap" id="materials-list">
+<p class="font-body-md text-on-surface-variant col-span-2">Loading materials…</p>
+</div>
+</section>
 
-<!-- Recommended Focus Areas -->
-<div>
-  <h2 class="font-headline-md text-xl text-on-surface mb-4">Recommended Focus Areas</h2>
-  <div id="focus-areas" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <p class="text-sm text-on-surface-variant">Loading...</p>
-  </div>
+<!-- Panel: My Quizzes -->
+<section id="panel-quizzes" class="hidden">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">My Quizzes</h2>
+<div class="space-y-card-gap" id="quizzes-list">
+<p class="font-body-md text-on-surface-variant">Loading quizzes…</p>
 </div>
+<div class="hidden" id="quiz-detail"></div>
+</section>
+
+<!-- Panel: Doubt Session (frontend-only stub, no API calls) -->
+<section id="panel-doubt" class="hidden">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Doubt Session</h2>
+<div class="bg-surface-container-lowest rounded-xl card-elevation p-6 flex flex-col items-center text-center gap-3">
+<span class="material-symbols-outlined text-4xl text-primary">forum</span>
+<h3 class="font-headline-md text-headline-md text-primary">Ask a doubt</h3>
+<p class="font-body-md text-on-surface-variant">Ask a question about any of your uploaded material and get an AI explanation. This feature is coming soon.</p>
+<div class="w-full flex gap-2 mt-2">
+<input class="flex-1 rounded-lg border border-outline-variant px-3 py-2 bg-surface text-on-surface disabled:opacity-60" disabled="" placeholder="Type your doubt..." type="text"/>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg opacity-50 cursor-not-allowed font-data-mono text-data-mono" disabled="">Send</button>
+</div>
+</div>
+</section>
+
+<!-- Panel: Analysis -->
+<section id="panel-analysis" class="hidden">
+<h2 class="font-headline-md text-headline-md text-primary mb-4">Analysis</h2>
+<div class="space-y-card-gap" id="analysis-list">
+<p class="font-body-md text-on-surface-variant">Loading analysis…</p>
+</div>
+</section>
 
 </main>
+</div>
 
 <script>
-  const ACCENT_COLORS = ["border-t-primary-container", "border-t-accent-gold", "border-t-secondary"];
+// ---- Auth guard: must run before anything else on this page ----
+let CURRENT_USER_ID = null;
 
-  function timeAgo(dateStr) {
-    const diffMs = Date.now() - new Date(dateStr).getTime();
-    const days = Math.floor(diffMs / 86400000);
-    if (days <= 0) return "Added today";
-    if (days === 1) return "Added 1 day ago";
-    if (days < 7) return `Added ${days} days ago`;
-    const weeks = Math.floor(days / 7);
-    return weeks === 1 ? "Added 1 week ago" : `Added ${weeks} weeks ago`;
-  }
+// ---- Sidebar tab switching ----
+const TABS = ["material", "quizzes", "doubt", "analysis"];
+let quizzesLoaded = false;
+let analysisLoaded = false;
+let quizSessions = [];
 
-  function renderMaterials(materials) {
-    const el = document.getElementById("recent-materials");
-    if (!materials.length) {
-      el.innerHTML = `<p class="text-sm text-on-surface-variant">No materials uploaded yet.</p>`;
+function showTab(tab) {
+  TABS.forEach(t => {
+    document.getElementById(`panel-${t}`).classList.toggle("hidden", t !== tab);
+    const btn = document.getElementById(`tab-${t}`);
+    btn.classList.toggle("bg-secondary-container", t === tab);
+    btn.classList.toggle("text-on-secondary-container", t === tab);
+    btn.classList.toggle("text-on-surface-variant", t !== tab);
+  });
+  if (tab === "quizzes" && !quizzesLoaded) loadQuizzes();
+  if (tab === "analysis" && !analysisLoaded) loadAnalysis();
+}
+
+// ---- My Material ----
+async function loadMaterials() {
+  const container = document.getElementById("materials-list");
+  try {
+    const materials = await apiGet(`/materials?user_id=${CURRENT_USER_ID}`);
+    if (materials.length === 0) {
+      container.innerHTML = `<p class="font-body-md text-on-surface-variant col-span-2">No materials yet — upload a PDF to get started.</p>`;
       return;
     }
-    el.innerHTML = materials.map(m => `
-      <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-4 flex items-start gap-3">
-        <span class="material-symbols-outlined text-error">picture_as_pdf</span>
-        <div class="min-w-0">
-          <p class="text-sm font-medium text-on-surface truncate">${m.filename}</p>
-          <p class="text-xs text-on-surface-variant">${timeAgo(m.upload_date)}</p>
+    container.innerHTML = materials.map(m => `
+      <div class="bg-surface-container-lowest rounded-xl card-elevation p-4 flex flex-col relative card-interactive cursor-pointer"
+           onclick="window.location.href='embedding-confirmation.html?material_id=${m.id}'">
+        <div class="absolute top-4 right-4 flex items-center gap-1 ${m.embedding_status === 'done' ? 'text-secondary' : 'text-on-primary-container'}">
+          <span class="material-symbols-outlined text-sm">${m.embedding_status === 'done' ? 'check_circle' : 'sync'}</span>
+          <span class="font-label-caps text-label-caps uppercase">${m.embedding_status}</span>
+        </div>
+        <div class="flex items-start gap-4 mb-4 mt-2">
+          <div class="w-10 h-10 rounded bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined">picture_as_pdf</span>
+          </div>
+          <div>
+            <h4 class="font-data-mono text-data-mono text-primary truncate pr-20">${m.filename}</h4>
+            <p class="font-body-md text-body-md text-sm text-on-surface-variant mt-1">Added ${new Date(m.upload_date).toLocaleDateString()}</p>
+          </div>
         </div>
       </div>
     `).join("");
+  } catch (err) {
+    container.innerHTML = `<p class="text-error col-span-2">Couldn't reach the backend (${err.message}). Is it running at ${API_BASE}?</p>`;
   }
+}
 
-  function renderFocusAreas(areas) {
-    const el = document.getElementById("focus-areas");
-    if (!areas.length) {
-      el.innerHTML = `<p class="text-sm text-on-surface-variant">Complete a few quizzes to see personalized focus areas here.</p>`;
-      return;
-    }
-    el.innerHTML = areas.map((a, i) => `
-      <div class="bg-surface-container-lowest border border-outline-variant border-t-4 ${ACCENT_COLORS[i % 3]} rounded-lg p-4 flex flex-col gap-2">
-        <p class="font-semibold text-on-surface">${a.topic}</p>
-        <p class="text-sm text-on-surface-variant flex-1">${a.accuracy}% accuracy so far — focused review here will help most.</p>
-        <a href="index.html" class="text-sm text-primary-container font-medium hover:underline">Start Module →</a>
+document.getElementById("upload-btn").addEventListener("click", () => document.getElementById("pdf-input").click());
+
+document.getElementById("pdf-input").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const status = document.getElementById("upload-status");
+  const spinner = document.getElementById("upload-spinner");
+  const statusText = document.getElementById("upload-status-text");
+  status.classList.remove("hidden");
+  spinner.classList.remove("hidden");
+  statusText.textContent = "Uploading and processing — this can take a minute (embedding + topic + quiz generation)…";
+
+  const formData = new FormData();
+  formData.append("user_id", CURRENT_USER_ID);
+  formData.append("file", file);
+
+  try {
+    const result = await apiPostForm("/materials/upload", formData);
+    spinner.classList.add("hidden");
+    statusText.textContent = `Done — ${result.chunks_created} chunks, ${result.topics_found} topics, ${result.questions_created} questions.`;
+    window.location.href = `embedding-confirmation.html?material_id=${result.material_id}`;
+  } catch (err) {
+    spinner.classList.add("hidden");
+    statusText.textContent = `Upload failed: ${err.message}`;
+  }
+});
+
+// ---- My Quizzes ----
+async function loadQuizzes() {
+  quizzesLoaded = true;
+  const container = document.getElementById("quizzes-list");
+  try {
+    quizSessions = await apiGet(`/quiz-sessions?user_id=${CURRENT_USER_ID}`);
+    renderQuizList();
+  } catch (err) {
+    container.innerHTML = `<p class="text-error">Couldn't load quizzes (${err.message}).</p>`;
+  }
+}
+
+function renderQuizList() {
+  const container = document.getElementById("quizzes-list");
+  if (quizSessions.length === 0) {
+    container.innerHTML = `<p class="font-body-md text-on-surface-variant">No quizzes taken yet — start one from a material's topic list.</p>`;
+    return;
+  }
+  container.innerHTML = quizSessions.map((s, i) => `
+    <div class="bg-surface-container-lowest rounded-xl card-elevation p-4 flex items-center justify-between card-interactive cursor-pointer" onclick="openQuizDetail(${i})">
+      <div>
+        <h4 class="font-data-mono text-data-mono text-primary">Quiz ${i + 1}</h4>
+        <p class="font-body-md text-sm text-on-surface-variant mt-1">${new Date(s.started_at).toLocaleDateString()} • ${s.total_questions} question${s.total_questions === 1 ? "" : "s"}</p>
       </div>
-    `).join("");
+      <span class="font-data-mono text-data-mono ${s.completed_at ? "text-secondary" : "text-on-primary-container"}">
+        ${s.completed_at ? `${s.correct_count}/${s.total_questions}` : "In progress"}
+      </span>
+    </div>
+  `).join("");
+}
+
+async function openQuizDetail(index) {
+  const session = quizSessions[index];
+  document.getElementById("quizzes-list").classList.add("hidden");
+  const detail = document.getElementById("quiz-detail");
+  detail.classList.remove("hidden");
+  detail.innerHTML = `<p class="font-body-md text-on-surface-variant">Loading Quiz ${index + 1}…</p>`;
+  try {
+    const attempts = await apiGet(`/quiz-sessions/${session.id}/attempts`);
+    detail.innerHTML = `
+      <button class="flex items-center gap-1 text-primary mb-4 font-data-mono text-data-mono" onclick="closeQuizDetail()">
+        <span class="material-symbols-outlined text-lg">arrow_back</span> Back to quizzes
+      </button>
+      <h4 class="font-headline-md text-headline-md text-primary mb-4">Quiz ${index + 1}</h4>
+      <div class="space-y-card-gap">
+        ${attempts.map((a, qi) => `
+          <div class="bg-surface-container-lowest rounded-xl card-elevation p-4">
+            <p class="font-data-mono text-data-mono text-primary mb-2">Q${qi + 1}. ${a.questions.question_text}</p>
+            <p class="font-body-md text-sm ${a.is_correct ? "text-secondary" : "text-error"}">Your answer: ${a.selected_answer} ${a.is_correct ? "✓" : "✗"}</p>
+            ${!a.is_correct ? `<p class="font-body-md text-sm text-on-surface-variant">Correct answer: ${a.questions.correct_answer}</p>` : ""}
+            ${a.questions.explanation ? `<p class="font-body-md text-sm text-on-surface-variant mt-1">${a.questions.explanation}</p>` : ""}
+          </div>
+        `).join("")}
+      </div>
+    `;
+  } catch (err) {
+    detail.innerHTML = `<p class="text-error">Couldn't load this quiz (${err.message}).</p>`;
   }
+}
 
-  (async () => {
-    CURRENT_USER_ID = await requireLogin();
-    if (!CURRENT_USER_ID) return;
+function closeQuizDetail() {
+  document.getElementById("quiz-detail").classList.add("hidden");
+  document.getElementById("quiz-detail").innerHTML = "";
+  document.getElementById("quizzes-list").classList.remove("hidden");
+}
 
-    const data = await apiGet(`/dashboard/${CURRENT_USER_ID}`);
-
-    if (data.profile) {
-      document.getElementById("profile-username").textContent = data.profile.username || "Scholar";
-      document.getElementById("profile-department").textContent = data.profile.department || "";
-      document.getElementById("profile-goal").textContent = data.profile.goal || "-";
-      document.getElementById("avatar-btn").textContent = (data.profile.username || "?").charAt(0).toUpperCase();
-    } else {
-      window.location.href = "onboarding.html";
+// ---- Analysis ----
+async function loadAnalysis() {
+  analysisLoaded = true;
+  const container = document.getElementById("analysis-list");
+  try {
+    if (quizSessions.length === 0) quizSessions = await apiGet(`/quiz-sessions?user_id=${CURRENT_USER_ID}`);
+    const completed = quizSessions.filter(s => s.completed_at);
+    if (completed.length === 0) {
+      container.innerHTML = `<p class="font-body-md text-on-surface-variant">No completed quizzes yet.</p>`;
       return;
     }
-
-    document.getElementById("stat-quizzes").textContent = data.quizzes_completed;
-    document.getElementById("stat-score").textContent = data.average_score + "%";
-    document.getElementById("stat-competency-label").textContent = data.competency_progress + "%";
-    document.getElementById("stat-competency-bar").style.width = data.competency_progress + "%";
-
-    renderMaterials(data.recent_materials);
-    renderFocusAreas(data.weak_areas);
-  })();
-
-  // Upload wiring (same pattern as index.html)
-  const dropZone = document.getElementById("drop-zone");
-  const pdfInput = document.getElementById("pdf-input");
-  const uploadStatus = document.getElementById("upload-status");
-
-  document.getElementById("upload-btn").addEventListener("click", (e) => {
-    e.stopPropagation();
-    pdfInput.click();
-  });
-  dropZone.addEventListener("click", () => pdfInput.click());
-  dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("border-primary-container"); });
-  dropZone.addEventListener("dragleave", () => dropZone.classList.remove("border-primary-container"));
-  dropZone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dropZone.classList.remove("border-primary-container");
-    if (e.dataTransfer.files[0]) handleUpload(e.dataTransfer.files[0]);
-  });
-  pdfInput.addEventListener("change", (e) => {
-    if (e.target.files[0]) handleUpload(e.target.files[0]);
-  });
-
-  async function handleUpload(file) {
-    uploadStatus.textContent = "Uploading and processing...";
-    uploadStatus.classList.remove("hidden");
-    const formData = new FormData();
-    formData.append("user_id", CURRENT_USER_ID);
-    formData.append("file", file);
-    try {
-      const result = await apiPostForm("/materials/upload", formData);
-      window.location.href = `embedding-confirmation.html?material_id=${result.material_id}`;
-    } catch (err) {
-      uploadStatus.textContent = "Upload failed: " + err.message;
-    }
+    container.innerHTML = completed.map((s) => {
+      const i = quizSessions.indexOf(s);
+      const pct = s.total_questions ? Math.round(100 * s.correct_count / s.total_questions) : 0;
+      return `
+        <div class="bg-surface-container-lowest rounded-xl card-elevation p-4">
+          <div class="flex justify-between items-center mb-2">
+            <h4 class="font-data-mono text-data-mono text-primary">Quiz ${i + 1}</h4>
+            <span class="font-data-mono text-data-mono text-primary">${s.correct_count}/${s.total_questions} (${pct}%)</span>
+          </div>
+          <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+            <div class="h-full bg-secondary" style="width:${pct}%"></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    container.innerHTML = `<p class="text-error">Couldn't load analysis (${err.message}).</p>`;
   }
+}
+
+// ---- Entry point: check login, load profile, then load the rest ----
+(async () => {
+  CURRENT_USER_ID = await requireLogin();
+  if (!CURRENT_USER_ID) return; // requireLogin already redirected to login.html
+
+  const profile = await apiGet(`/profile/${CURRENT_USER_ID}`).catch(() => null);
+  if (!profile) {
+    window.location.href = "onboarding.html";
+    return;
+  }
+  document.getElementById("profile-username").textContent = profile.username || "Scholar";
+  document.getElementById("profile-department").textContent = profile.department || "";
+  document.getElementById("profile-goal").textContent = profile.goal || "-";
+  document.getElementById("welcome-heading").textContent = `Welcome back, ${profile.username || "Scholar"}.`;
+  document.getElementById("avatar-btn").textContent = (profile.username || "?").charAt(0).toUpperCase();
+
+  loadMaterials();
+})();
 </script>
 </body></html>
