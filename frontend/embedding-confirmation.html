@@ -4,7 +4,9 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Embedding Confirmation - SANKHYASETU</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="config.js"></script>
+
+
+
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -110,7 +112,7 @@
 <main class="w-full max-w-lg px-container-padding pt-12 flex flex-col items-center" id="main-content">
 <p class="font-body-md text-body-md text-on-surface-variant">Loading material status…</p>
 </main>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script>
 async function load() {
@@ -151,6 +153,7 @@ async function load() {
         ${m.topics.length ? `<ul class="mt-4 font-body-md text-sm text-on-surface-variant list-disc pl-5">${m.topics.map(t => `<li>${t.topic_name}</li>`).join("")}</ul>` : ""}
       </div>
       <div class="w-full space-y-3">
+
         <button class="w-full bg-primary text-on-primary font-data-mono text-data-mono font-medium py-4 rounded-lg shadow-sm hover:bg-primary-container transition-colors"
                 onclick="window.location.href='quiz.html?material_id=${materialId}'">Start Quiz</button>
         <button class="w-full bg-surface-container-lowest border border-primary text-primary font-data-mono text-data-mono font-medium py-4 rounded-lg shadow-sm hover:bg-surface-container-low transition-colors"

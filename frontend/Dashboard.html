@@ -13,54 +13,22 @@
             darkMode: "class",
             theme: { extend: {
                 "colors": {
-                        "secondary-container": "#ffa933",
-                        "on-tertiary": "#ffffff",
-                        "on-tertiary-fixed": "#241a0b",
-                        "primary-fixed": "#d8e2ff",
-                        "surface-dim": "#ebd7be",
-                        "secondary-fixed-dim": "#ffb962",
-                        "surface-container": "#ffebd3",
-                        "on-primary": "#ffffff",
-                        "outline-variant": "#c3c6d3",
-                        "on-error-container": "#93000a",
-                        "error-container": "#ffdad6",
-                        "surface-bright": "#fff8f4",
-                        "on-tertiary-fixed-variant": "#524533",
-                        "secondary-fixed": "#ffddb9",
-                        "on-tertiary-container": "#decab2",
-                        "on-primary-fixed": "#001a41",
-                        "on-error": "#ffffff",
-                        "tertiary-fixed": "#f4dfc7",
-                        "on-surface": "#241a0b",
-                        "surface-variant": "#f4dfc7",
-                        "inverse-surface": "#3a2e1e",
-                        "surface-container-low": "#fff1e3",
-                        "surface-container-highest": "#f4dfc7",
-                        "on-secondary": "#ffffff",
-                        "tertiary-fixed-dim": "#d7c4ac",
-                        "inverse-on-surface": "#ffeedb",
-                        "background": "#fff8f4",
-                        "tertiary": "#4b3e2c",
-                        "surface-tint": "#2a5dad",
-                        "tertiary-container": "#635542",
-                        "on-background": "#241a0b",
-                        "primary": "#003d86",
-                        "secondary": "#865300",
-                        "surface": "#fff8f4",
-                        "on-primary-container": "#b7cdff",
-                        "on-secondary-fixed": "#2b1700",
-                        "surface-container-high": "#fae5cc",
-                        "primary-container": "#2055a5",
-                        "on-secondary-container": "#6c4200",
-                        "error": "#ba1a1a",
-                        "surface-container-lowest": "#ffffff",
-                        "outline": "#737783",
-                        "inverse-primary": "#adc7ff",
-                        "on-secondary-fixed-variant": "#663e00",
-                        "primary-fixed-dim": "#adc7ff",
-                        "on-primary-fixed-variant": "#004493",
-                        "on-surface-variant": "#434751",
-                        "accent-gold": "#ffa933"
+                        "secondary-container": "#ffa933","on-tertiary": "#ffffff","on-tertiary-fixed": "#241a0b",
+                        "primary-fixed": "#d8e2ff","surface-dim": "#ebd7be","secondary-fixed-dim": "#ffb962",
+                        "surface-container": "#ffebd3","on-primary": "#ffffff","outline-variant": "#c3c6d3",
+                        "on-error-container": "#93000a","error-container": "#ffdad6","surface-bright": "#fff8f4",
+                        "on-tertiary-fixed-variant": "#524533","secondary-fixed": "#ffddb9","on-tertiary-container": "#decab2",
+                        "on-primary-fixed": "#001a41","on-error": "#ffffff","tertiary-fixed": "#f4dfc7",
+                        "on-surface": "#241a0b","surface-variant": "#f4dfc7","inverse-surface": "#3a2e1e",
+                        "surface-container-low": "#fff1e3","surface-container-highest": "#f4dfc7","on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#d7c4ac","inverse-on-surface": "#ffeedb","background": "#fff8f4",
+                        "tertiary": "#4b3e2c","surface-tint": "#2a5dad","tertiary-container": "#635542",
+                        "on-background": "#241a0b","primary": "#003d86","secondary": "#865300","surface": "#fff8f4",
+                        "on-primary-container": "#b7cdff","on-secondary-fixed": "#2b1700","surface-container-high": "#fae5cc",
+                        "primary-container": "#2055a5","on-secondary-container": "#6c4200","error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff","outline": "#737783","inverse-primary": "#adc7ff",
+                        "on-secondary-fixed-variant": "#663e00","primary-fixed-dim": "#adc7ff","on-primary-fixed-variant": "#004493",
+                        "on-surface-variant": "#434751","accent-gold": "#ffa933"
                 },
                 "borderRadius": {"DEFAULT":"0.5rem","lg":"0.5rem","xl":"0.5rem","full":"9999px"},
                 "spacing": {"unit":"8px","section-margin":"32px","container-padding":"20px","card-gap":"12px","gutter":"24px","lg":"48px","xs":"4px","base":"8px","sm":"12px","xl":"80px","md":"24px"},
@@ -124,7 +92,6 @@
 </header>
 
 <div class="flex flex-col md:flex-row max-w-6xl mx-auto">
-<!-- Sidebar -->
 <aside class="w-full md:w-64 border-b md:border-b-0 md:border-r border-outline-variant bg-surface-container-lowest md:sticky md:top-16 md:self-start">
 <nav class="flex md:flex-col overflow-x-auto md:overflow-visible px-2 md:px-4 py-2 md:py-6 gap-1 md:gap-2">
 <button class="tab-btn flex items-center gap-3 px-4 py-3 rounded-lg font-data-mono text-data-mono bg-secondary-container text-on-secondary-container" data-tab="material" id="tab-material" onclick="showTab('material')">
@@ -142,17 +109,14 @@
 </nav>
 </aside>
 
-<!-- Content -->
 <main class="flex-1 px-container-padding py-6 space-y-section-margin">
 
-<!-- Panel: My Material -->
 <section id="panel-material">
 <section class="mb-8">
 <h2 class="font-headline-md text-headline-md text-primary mb-2" id="welcome-heading">Welcome back, Scholar.</h2>
 <p class="font-body-lg text-body-lg text-on-surface-variant">Ready to synthesize new knowledge today?</p>
 </section>
 
-<!-- Profile card -->
 <div class="bg-surface-container-lowest rounded-xl card-elevation p-6 flex flex-col gap-2 mb-section-margin">
 <p class="font-headline-md text-headline-md text-primary" id="profile-username">Loading...</p>
 <p class="font-body-md text-on-surface-variant" id="profile-department">-</p>
@@ -163,7 +127,6 @@ Edit Profile
 </a>
 </div>
 
-<!-- Upload Material Card (wired to POST /materials/upload) -->
 <div class="bg-surface-container-lowest rounded-xl card-elevation p-6 flex flex-col items-center justify-center border border-dashed border-outline-variant mb-section-margin">
 <div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-4">
 <span class="material-symbols-outlined text-4xl text-primary" id="upload-icon">cloud_upload</span>
@@ -181,7 +144,6 @@ Edit Profile
 </div>
 </div>
 
-<!-- Recent Materials (live from GET /materials?user_id=...) -->
 <div class="flex justify-between items-end mb-4">
 <h3 class="font-headline-md text-headline-md text-primary">Recent Materials</h3>
 </div>
@@ -190,7 +152,6 @@ Edit Profile
 </div>
 </section>
 
-<!-- Panel: My Quizzes -->
 <section id="panel-quizzes" class="hidden">
 <h2 class="font-headline-md text-headline-md text-primary mb-4">My Quizzes</h2>
 <div class="space-y-card-gap" id="quizzes-list">
@@ -199,7 +160,6 @@ Edit Profile
 <div class="hidden" id="quiz-detail"></div>
 </section>
 
-<!-- Panel: Doubt Session (frontend-only stub, no API calls) -->
 <section id="panel-doubt" class="hidden">
 <h2 class="font-headline-md text-headline-md text-primary mb-4">Doubt Session</h2>
 <div class="bg-surface-container-lowest rounded-xl card-elevation p-6 flex flex-col items-center text-center gap-3">
@@ -213,7 +173,6 @@ Edit Profile
 </div>
 </section>
 
-<!-- Panel: Analysis -->
 <section id="panel-analysis" class="hidden">
 <h2 class="font-headline-md text-headline-md text-primary mb-4">Analysis</h2>
 <div class="space-y-card-gap" id="analysis-list">
@@ -225,10 +184,8 @@ Edit Profile
 </div>
 
 <script>
-// ---- Auth guard: must run before anything else on this page ----
 let CURRENT_USER_ID = null;
 
-// ---- Sidebar tab switching ----
 const TABS = ["material", "quizzes", "doubt", "analysis"];
 let quizzesLoaded = false;
 let analysisLoaded = false;
@@ -246,7 +203,6 @@ function showTab(tab) {
   if (tab === "analysis" && !analysisLoaded) loadAnalysis();
 }
 
-// ---- My Material ----
 async function loadMaterials() {
   const container = document.getElementById("materials-list");
   try {
@@ -305,7 +261,6 @@ document.getElementById("pdf-input").addEventListener("change", async (e) => {
   }
 });
 
-// ---- My Quizzes ----
 async function loadQuizzes() {
   quizzesLoaded = true;
   const container = document.getElementById("quizzes-list");
@@ -371,7 +326,6 @@ function closeQuizDetail() {
   document.getElementById("quizzes-list").classList.remove("hidden");
 }
 
-// ---- Analysis ----
 async function loadAnalysis() {
   analysisLoaded = true;
   const container = document.getElementById("analysis-list");
@@ -402,10 +356,9 @@ async function loadAnalysis() {
   }
 }
 
-// ---- Entry point: check login, load profile, then load the rest ----
 (async () => {
   CURRENT_USER_ID = await requireLogin();
-  if (!CURRENT_USER_ID) return; // requireLogin already redirected to login.html
+  if (!CURRENT_USER_ID) return;
 
   const profile = await apiGet(`/profile/${CURRENT_USER_ID}`).catch(() => null);
   if (!profile) {

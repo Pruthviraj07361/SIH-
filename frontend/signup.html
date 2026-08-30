@@ -11,54 +11,22 @@
     theme: {
       extend: {
         "colors": {
-                "secondary-container": "#ffa933",
-                "on-tertiary": "#ffffff",
-                "on-tertiary-fixed": "#241a0b",
-                "primary-fixed": "#d8e2ff",
-                "surface-dim": "#ebd7be",
-                "secondary-fixed-dim": "#ffb962",
-                "surface-container": "#ffebd3",
-                "on-primary": "#ffffff",
-                "outline-variant": "#c3c6d3",
-                "on-error-container": "#93000a",
-                "error-container": "#ffdad6",
-                "surface-bright": "#fff8f4",
-                "on-tertiary-fixed-variant": "#524533",
-                "secondary-fixed": "#ffddb9",
-                "on-tertiary-container": "#decab2",
-                "on-primary-fixed": "#001a41",
-                "on-error": "#ffffff",
-                "tertiary-fixed": "#f4dfc7",
-                "on-surface": "#241a0b",
-                "surface-variant": "#f4dfc7",
-                "inverse-surface": "#3a2e1e",
-                "surface-container-low": "#fff1e3",
-                "surface-container-highest": "#f4dfc7",
-                "on-secondary": "#ffffff",
-                "tertiary-fixed-dim": "#d7c4ac",
-                "inverse-on-surface": "#ffeedb",
-                "background": "#fff8f4",
-                "tertiary": "#4b3e2c",
-                "surface-tint": "#2a5dad",
-                "tertiary-container": "#635542",
-                "on-background": "#241a0b",
-                "primary": "#003d86",
-                "secondary": "#865300",
-                "surface": "#fff8f4",
-                "on-primary-container": "#b7cdff",
-                "on-secondary-fixed": "#2b1700",
-                "surface-container-high": "#fae5cc",
-                "primary-container": "#2055a5",
-                "on-secondary-container": "#6c4200",
-                "error": "#ba1a1a",
-                "surface-container-lowest": "#ffffff",
-                "outline": "#737783",
-                "inverse-primary": "#adc7ff",
-                "on-secondary-fixed-variant": "#663e00",
-                "primary-fixed-dim": "#adc7ff",
-                "on-primary-fixed-variant": "#004493",
-                "on-surface-variant": "#434751",
-                "accent-gold": "#ffa933"
+                "secondary-container": "#ffa933", "on-tertiary": "#ffffff", "on-tertiary-fixed": "#241a0b",
+                "primary-fixed": "#d8e2ff", "surface-dim": "#ebd7be", "secondary-fixed-dim": "#ffb962",
+                "surface-container": "#ffebd3", "on-primary": "#ffffff", "outline-variant": "#c3c6d3",
+                "on-error-container": "#93000a", "error-container": "#ffdad6", "surface-bright": "#fff8f4",
+                "on-tertiary-fixed-variant": "#524533", "secondary-fixed": "#ffddb9", "on-tertiary-container": "#decab2",
+                "on-primary-fixed": "#001a41", "on-error": "#ffffff", "tertiary-fixed": "#f4dfc7",
+                "on-surface": "#241a0b", "surface-variant": "#f4dfc7", "inverse-surface": "#3a2e1e",
+                "surface-container-low": "#fff1e3", "surface-container-highest": "#f4dfc7", "on-secondary": "#ffffff",
+                "tertiary-fixed-dim": "#d7c4ac", "inverse-on-surface": "#ffeedb", "background": "#fff8f4",
+                "tertiary": "#4b3e2c", "surface-tint": "#2a5dad", "tertiary-container": "#635542",
+                "on-background": "#241a0b", "primary": "#003d86", "secondary": "#865300", "surface": "#fff8f4",
+                "on-primary-container": "#b7cdff", "on-secondary-fixed": "#2b1700", "surface-container-high": "#fae5cc",
+                "primary-container": "#2055a5", "on-secondary-container": "#6c4200", "error": "#ba1a1a",
+                "surface-container-lowest": "#ffffff", "outline": "#737783", "inverse-primary": "#adc7ff",
+                "on-secondary-fixed-variant": "#663e00", "primary-fixed-dim": "#adc7ff", "on-primary-fixed-variant": "#004493",
+                "on-surface-variant": "#434751", "accent-gold": "#ffa933"
         },
         "borderRadius": { "DEFAULT": "0.5rem", "lg": "0.5rem", "xl": "0.5rem", "full": "9999px" },
         "spacing": {
@@ -162,16 +130,15 @@
 </div>
 
 <div id="error-box" class="hidden bg-error-container text-on-error-container rounded p-sm mb-md text-sm"></div>
-<div id="success-box" class="hidden bg-surface-container text-secondary rounded p-sm mb-md text-sm"></div>
 
 <form id="signup-form" class="flex flex-col gap-md">
 <div class="flex flex-col gap-xs">
-<label class="font-label-md text-label-md text-on-surface" for="email">Email</label>
+<label class="font-label-md text-label-md text-on-surface" for="username">Username</label>
 <div class="relative">
 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-outline pointer-events-none">
 <span class="material-symbols-outlined text-xl">person</span>
 </span>
-<input class="w-full pl-10 pr-3 py-2 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 transition-all outline-none" id="email" placeholder="Enter your email" type="email" required>
+<input class="w-full pl-10 pr-3 py-2 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-on-surface placeholder:text-outline focus:border-primary-container focus:ring-2 focus:ring-primary-container/10 transition-all outline-none" id="username" placeholder="Choose a username" type="text" pattern="[A-Za-z0-9_]{3,20}" title="3-20 letters, numbers, or underscores" required>
 </div>
 </div>
 <div class="flex flex-col gap-xs">
@@ -223,37 +190,48 @@
     pw.type = pw.type === "password" ? "text" : "password";
   });
 
+  // Supabase Auth needs an email under the hood — we derive a fake, unique
+  // one from the username so the person only ever sees/types a username.
+  function usernameToFakeEmail(username) {
+    return `${username.trim().toLowerCase()}@sankhyasetu.local`;
+  }
+
   const form = document.getElementById("signup-form");
   const errorBox = document.getElementById("error-box");
-  const successBox = document.getElementById("success-box");
   const submitBtn = document.getElementById("submit-btn");
   const submitText = document.getElementById("submit-text");
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     errorBox.classList.add("hidden");
-    successBox.classList.add("hidden");
     submitBtn.disabled = true;
     submitText.textContent = "Creating account...";
 
-    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
+    const fakeEmail = usernameToFakeEmail(username);
 
-    const { data, error } = await supabaseAuth.auth.signUp({ email, password });
+    const { data, error } = await supabaseAuth.auth.signUp({
+      email: fakeEmail,
+      password,
+      options: { data: { username } }  // stored in the user's metadata for later
+    });
 
     submitBtn.disabled = false;
     submitText.textContent = "Create Account";
 
     if (error) {
-      errorBox.textContent = error.message;
+      // Supabase's message mentions "email" internally — reword for the user.
+      errorBox.textContent = error.message.includes("registered")
+        ? "That username is already taken."
+        : error.message;
       errorBox.classList.remove("hidden");
       return;
     }
 
     if (!data.session) {
-      successBox.textContent = "Account created! Check your email to confirm, then log in.";
-      successBox.classList.remove("hidden");
-      form.reset();
+      errorBox.textContent = "Account created, but couldn't sign you in automatically. Try logging in.";
+      errorBox.classList.remove("hidden");
       return;
     }
 

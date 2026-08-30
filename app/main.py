@@ -293,15 +293,23 @@ def get_weekly_mock(user_id: str):
 def save_profile(user_id: str = Form(...), username: str = Form(...),
                   department: str = Form(...), age: int = Form(...),
                   goal: str = Form(...)):
-    """Onboarding screen: called once, right after signup."""
+    """Onboarding screen: called once, right after signup.
+
+    IMPORTANT: `profiles.id` is the primary key and *is* the Supabase auth
+    user id (it's a 1:1 extension of auth.users, not a separate FK column
+    called user_id). A signup trigger already inserts a bare {id, email,
+    created_at} row for every new user, so this call must UPDATE that row
+    (upsert keyed on "id"), not try to insert a brand-new one with a
+    "user_id" column that doesn't exist on this table.
+    """
     supabase = get_client()
     row = supabase.table("profiles").upsert({
-        "user_id": user_id,
+        "id": user_id,
         "username": username,
         "department": department,
         "age": age,
         "goal": goal,
-    }).execute().data[0]
+    }, on_conflict="id").execute().data[0]
     return row
 
 
@@ -310,7 +318,7 @@ def get_profile(user_id: str):
     """Used to check whether onboarding is already done (e.g. on login),
     and to populate the dashboard's profile card."""
     supabase = get_client()
-    rows = supabase.table("profiles").select("*").eq("user_id", user_id).execute().data
+    rows = supabase.table("profiles").select("*").eq("id", user_id).execute().data
     return rows[0] if rows else None
 
 
@@ -320,7 +328,7 @@ def get_dashboard(user_id: str):
     weakest-topic focus areas, aggregated in one call."""
     supabase = get_client()
 
-    profile = supabase.table("profiles").select("*").eq("user_id", user_id).execute().data
+    profile = supabase.table("profiles").select("*").eq("id", user_id).execute().data
     profile = profile[0] if profile else None
 
     sessions = supabase.table("quiz_sessions").select("id, score, completed_at").eq(
