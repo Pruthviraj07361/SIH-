@@ -4,6 +4,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Analytics - SANKHYASETU</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
@@ -94,7 +95,7 @@
 <body class="bg-background text-on-surface antialiased min-h-screen pb-24 font-body-md">
 <header class="w-full top-0 sticky shadow-sm z-40 bg-surface-container-lowest/90 backdrop-blur-sm border-b border-outline-variant">
 <div class="flex items-center gap-md px-container-padding py-unit w-full h-16 max-w-6xl mx-auto">
-<a class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container text-primary-container flex-shrink-0" href="index.html">
+<a class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container text-primary-container flex-shrink-0" href="dashboard.html">
 <span class="material-symbols-outlined">arrow_back</span>
 </a>
 <div class="h-10 w-auto flex items-center">
@@ -118,12 +119,13 @@
 </div>
 </main>
 
-<script src="config.js"></script>
 <script>
+let CURRENT_USER_ID = null;
+
 async function load() {
   const container = document.getElementById("analytics-content");
   try {
-    const data = await apiGet(`/analytics/${DEMO_USER_ID}`);
+    const data = await apiGet(`/analytics/${CURRENT_USER_ID}`);
     if (data.breakdown.length === 0) {
       container.innerHTML = `<p class="font-body-md text-on-surface-variant">No quiz attempts yet — take a quiz to see analytics here.</p>`;
       return;
@@ -166,6 +168,11 @@ async function load() {
     container.innerHTML = `<p class="text-error">Couldn't load analytics (${err.message}). Is the backend running at ${API_BASE}?</p>`;
   }
 }
-load();
+
+(async () => {
+  CURRENT_USER_ID = await requireLogin();
+  if (!CURRENT_USER_ID) return;
+  load();
+})();
 </script>
 </body></html>

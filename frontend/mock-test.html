@@ -40,17 +40,21 @@ let currentIndex = 0;
 let selected = null;
 let score = 0;
 let sessionId = null;
+let userId = null;
 
 async function init() {
+  userId = await requireLogin();
+  if (!userId) return;
+
   const main = document.getElementById("main-content");
   try {
     const sessionForm = new FormData();
-    sessionForm.append("user_id", DEMO_USER_ID);
+    sessionForm.append("user_id", userId);
     sessionForm.append("type", "weekly_mock");
     const session = await apiPostForm("/quiz-sessions", sessionForm);
     sessionId = session.id;
 
-    questions = await apiGet(`/mock-test/${DEMO_USER_ID}`);
+    questions = await apiGet(`/mock-test/${userId}`);
     if (questions.length === 0) {
       main.innerHTML = `<p class="text-on-surface-variant">No materials uploaded this week yet — the mock test pools questions from this week's uploads.</p>`;
       return;
@@ -109,7 +113,7 @@ async function submitAnswer() {
   if (!selected) return;
   const q = questions[currentIndex];
   const form = new FormData();
-  form.append("user_id", DEMO_USER_ID);
+  form.append("user_id", userId);
   form.append("question_id", q.id);
   form.append("quiz_session_id", sessionId);
   form.append("selected_answer", selected);

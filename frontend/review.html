@@ -121,9 +121,12 @@
 <script src="config.js"></script>
 <script>
 async function load() {
+  const userId = await requireLogin();
+  if (!userId) return;
+
   const container = document.getElementById("review-content");
   try {
-    const items = await apiGet(`/review/${DEMO_USER_ID}`);
+    const items = await apiGet(`/review/${userId}`);
     if (items.length === 0) {
       container.innerHTML = `<p class="font-body-md text-on-surface-variant">No wrong answers yet — nice work, or you haven't taken a quiz.</p>`;
       return;

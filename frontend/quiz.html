@@ -71,8 +71,12 @@ let currentIndex = 0;
 let selected = null;
 let score = 0;
 let sessionId = null;
+let userId = null;
 
 async function init() {
+  userId = await requireLogin();
+  if (!userId) return;
+
   const materialId = qs("material_id");
   const topicId = qs("topic_id");
   const main = document.getElementById("main-content");
@@ -82,7 +86,7 @@ async function init() {
   }
   try {
     const sessionForm = new FormData();
-    sessionForm.append("user_id", DEMO_USER_ID);
+    sessionForm.append("user_id", userId);
     sessionForm.append("type", topicId ? "topic_quiz" : "full_quiz");
     const session = await apiPostForm("/quiz-sessions", sessionForm);
     sessionId = session.id;
@@ -134,7 +138,6 @@ function renderQuestion() {
 
   document.querySelectorAll('.option-label').forEach(label => {
     label.addEventListener("click", () => {
-      // Reset every option's visual state
       document.querySelectorAll('.option-label').forEach(l => {
         l.querySelector('.option-card').style.borderColor = "";
         l.querySelector('.option-card').style.backgroundColor = "";
@@ -144,7 +147,6 @@ function renderQuestion() {
         l.querySelector('input').checked = false;
       });
 
-      // Highlight the clicked option
       label.querySelector('input').checked = true;
       label.querySelector('.option-card').style.borderColor = "#003d86";
       label.querySelector('.option-card').style.borderWidth = "2px";
@@ -166,7 +168,7 @@ async function submitAnswer() {
   if (!selected) return;
   const q = questions[currentIndex];
   const form = new FormData();
-  form.append("user_id", DEMO_USER_ID);
+  form.append("user_id", userId);
   form.append("question_id", q.id);
   form.append("quiz_session_id", sessionId);
   form.append("selected_answer", selected);
