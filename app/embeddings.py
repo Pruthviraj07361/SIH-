@@ -27,6 +27,12 @@ def embed_chunks(chunks: list[str]) -> list[list[float]]:
 
 def store_chunks(material_id: str, chunks: list[str]) -> None:
     """Embeds and stores chunks in the `chunks` table (see schema.sql)."""
+    if not chunks:
+        # Nothing to store — e.g. an empty/blank/image-only PDF with no
+        # extractable text. Inserting an empty list would send a malformed
+        # request to PostgREST (PGRST100: "failed to parse columns
+        # parameter"), so bail out here instead.
+        return
     vectors = embed_chunks(chunks)
     supabase = get_client()
     rows = [

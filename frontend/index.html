@@ -91,6 +91,22 @@
         .card-elevation { box-shadow: 0px 4px 20px rgba(36, 26, 11, 0.05); border: 1px solid #c3c6d3; }
         .card-interactive:active { transform: scale(0.98); box-shadow: 0px 2px 10px rgba(36, 26, 11, 0.03); transition: all 0.15s ease-out; }
         .tab-btn { white-space: nowrap; }
+
+        /* Small inline spinner shown while a material is uploading/processing */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 61, 134, 0.2);
+            border-top-color: #003d86;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) {
+            .spinner { animation-duration: 1.6s; }
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface pb-6 font-body-md">
@@ -147,7 +163,10 @@
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
                     Add PDF
                 </button>
-<p class="font-body-md text-sm text-on-surface-variant mt-3 hidden" id="upload-status"></p>
+<div class="flex items-center gap-2 mt-3 hidden" id="upload-status">
+<span class="spinner hidden" id="upload-spinner"></span>
+<p class="font-body-md text-sm text-on-surface-variant" id="upload-status-text"></p>
+</div>
 </div>
 
 <!-- Recent Materials (live from GET /materials?user_id=...) -->
@@ -251,8 +270,11 @@ document.getElementById("pdf-input").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const status = document.getElementById("upload-status");
+  const spinner = document.getElementById("upload-spinner");
+  const statusText = document.getElementById("upload-status-text");
   status.classList.remove("hidden");
-  status.textContent = "Uploading and processing — this can take a minute (embedding + topic + quiz generation)…";
+  spinner.classList.remove("hidden");
+  statusText.textContent = "Uploading and processing — this can take a minute (embedding + topic + quiz generation)…";
 
   const formData = new FormData();
   formData.append("user_id", DEMO_USER_ID);
@@ -260,10 +282,12 @@ document.getElementById("pdf-input").addEventListener("change", async (e) => {
 
   try {
     const result = await apiPostForm("/materials/upload", formData);
-    status.textContent = `Done — ${result.chunks_created} chunks, ${result.topics_found} topics, ${result.questions_created} questions.`;
+    spinner.classList.add("hidden");
+    statusText.textContent = `Done — ${result.chunks_created} chunks, ${result.topics_found} topics, ${result.questions_created} questions.`;
     window.location.href = `embedding-confirmation.html?material_id=${result.material_id}`;
   } catch (err) {
-    status.textContent = `Upload failed: ${err.message}`;
+    spinner.classList.add("hidden");
+    statusText.textContent = `Upload failed: ${err.message}`;
   }
 });
 
