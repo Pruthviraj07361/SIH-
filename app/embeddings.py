@@ -1,28 +1,34 @@
 """
-Local embeddings via sentence-transformers (no API key needed — runs on-device).
+Local embeddings via fastembed (ONNX-based — much lighter on RAM than
+sentence-transformers/PyTorch, important for free-tier hosting like Render's
+512MB limit). No API key needed — runs on-device.
 Stores/searches vectors in Supabase via pgvector, per the spec's recommendation
 (one less moving part than a separate local FAISS index).
 """
-from sentence_transformers import SentenceTransformer
-from app.config import EMBEDDING_MODEL
+from fastembed import TextEmbedding
 from app.db import get_client
+
+# BAAI/bge-small-en-v1.5 outputs 384-dim vectors — same size as the
+# all-MiniLM-L6-v2 model this replaces, so the existing `vector(384)`
+# column in schema.sql and the match_chunks() RPC don't need to change.
+EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
 
 _model = None
 
 
-def get_model() -> SentenceTransformer:
+def get_model() -> TextEmbedding:
     """Lazy-load the model once and reuse it (loading it per-call is slow)."""
     global _model
     if _model is None:
-        _model = SentenceTransformer(EMBEDDING_MODEL)
+        _model = TextEmbedding(model_name=EMBEDDING_MODEL_NAME)
     return _model
 
 
 def embed_chunks(chunks: list[str]) -> list[list[float]]:
     """Returns one embedding vector per chunk."""
     model = get_model()
-    vectors = model.encode(chunks, show_progress_bar=False)
-    return vectors.tolist()
+    vectors = model.embed(chunks)  # generator of numpy arrays
+    return [v.tolist() for v in vectors]
 
 
 def store_chunks(material_id: str, chunks: list[str]) -> None:
@@ -48,7 +54,7 @@ def search_similar_chunks(material_id: str, query: str, top_k: int = 5) -> list[
     material, via a pgvector similarity RPC (see schema.sql for the function).
     """
     model = get_model()
-    query_vector = model.encode([query])[0].tolist()
+    query_vector = next(model.embed([query])).tolist()
 
     supabase = get_client()
     result = supabase.rpc(
