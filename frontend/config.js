@@ -1,6 +1,6 @@
 // Shared across all StudyAI pages.
 // Change API_BASE if your backend runs somewhere other than localhost:8000.
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = window.location.origin;
 
 // TEMP: stand-in for real auth. Swap this for the logged-in user's id once
 // Supabase Auth is wired in (see README "Not implemented yet").
